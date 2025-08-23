@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 require('dotenv').config({ path:"./config/db.env"})
 
-const uri =process.env.database_key;
+const uri = "mongodb+srv://yomna:yomna@signlang.gs0jb5i.mongodb.net/?retryWrites=true&w=majority&appName=signlang";
 async function connectDB() {
   try {
     await mongoose.connect(uri, {
