@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 require('dotenv').config({ path:"./config/db.env"})
 
-const uri = "mongodb+srv://yomna:yomna@signlang.gs0jb5i.mongodb.net/?retryWrites=true&w=majority&appName=signlang";
+const uri ="mongodb+srv://daliaamirghani:group2webproject@signlang.gs0jb5i.mongodb.net/signlang?retryWrites=true&w=majority&appName=signlang";
 async function connectDB() {
   try {
     await mongoose.connect(uri, {
