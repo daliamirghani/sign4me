@@ -1,6 +1,6 @@
 const signData= require("../models/level_model");
 const mongoose = require("mongoose");
-
+const helper = require("../helper functions/helpers")
 const getDataByLevel = async (req, res) => {
     try {
         const level = parseInt(req.params.level);
@@ -25,8 +25,50 @@ const getDataByCategory = async (req, res) => {
     }
 };
 
+const makeQuizWord = async (req, res) =>{
+const level = parseInt(req.params.level);
+const levelData = await signData.find({levelNumber: level})
+const levelIndex = level - 1;
+const shuffledData = helper.shuffle(levelData[levelIndex].signs);
+const quiz = helper.makeQuiz(shuffledData,1)
+
+if (quiz)
+{
+    return res.status(200).json({
+       quiz: quiz 
+    })
+}
+else {
+     return res.status(404).json({
+       msg: "Error creating quiz!" 
+    })
+}
+}
+
+const makeQuizSign= async (req, res) =>{
+const level = parseInt(req.params.level);
+const levelData = await signData.find({levelNumber: level})
+const levelIndex = level - 1;
+const shuffledData = helper.shuffle(levelData[levelIndex].signs);
+const quiz = helper.makeQuiz(shuffledData,1)
+
+if (quiz)
+{
+    return res.status(200).json({
+       quiz: quiz 
+    })
+}
+else {
+     return res.status(404).json({
+       msg: "Error creating quiz!" 
+    })
+}
+}
+
 
 module.exports = {
     getDataByCategory,
-    getDataByLevel
+    getDataByLevel,
+    makeQuizSign,
+    makeQuizWord
 }

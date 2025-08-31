@@ -6,7 +6,7 @@ const authRouter = require("./routes/authRouter");
 const app = express();
 connectDB();
 app.use(express.json());
-app.use('/data', dataRouter);
+app.use('/', dataRouter);
 app.use('/auth', authRouter);
 
 const PORT = 3000;
