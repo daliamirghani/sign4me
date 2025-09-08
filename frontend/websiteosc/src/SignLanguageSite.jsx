@@ -571,42 +571,29 @@ export function Lessons() {
   };
 
   if (!level) {
+  
     return (
-      <section className="section" style={{marginBottom: "265px", textAlign: "center",transform: "translate(0px,100px)"}}>
-        <h2 className="text-xl mb-4" style={{fontSize: "30px"}}>اختر مستواك</h2>
-        <div className="row gap" style={{transform: "translate(-660px,0px)"}}>
-          <Button
-            onClick={() => {
-              setLevel("beginner");
-              setUnlocked({ b1: true });
-              setCurrent("b1");
-            }}
-          >
-            مبتدئ
-          </Button>
-          <Button
-            onClick={() => {
-              setLevel("intermediate");
-              setUnlocked({ i1: true });
-              setCurrent("i1");
-            }}
-          >
-            متوسط
-          </Button>
-          <Button
-            onClick={() => {
-              setLevel("advanced");
-              setUnlocked({ a1: true });
-              setCurrent("a1");
-            }}
-          >
-            محترف
-          </Button>
+      <section
+        className="section"
+        style={{
+          marginBottom: "265px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          transform: "translateY(100px)",
+        }}
+      >
+        <h2 style={{ fontSize: "30px", marginBottom: "20px" }}>اختر مستواك</h2>
+        <div className="row gap" style={{ justifyContent: "center", gap: "20px" }}>
+          <Button onClick={() => setLevel("beginner")}>مبتدئ</Button>
+          <Button onClick={() => setLevel("intermediate")}>متوسط</Button>
+          <Button onClick={() => setLevel("advanced")}>محترف</Button>
         </div>
       </section>
     );
   }
-
   const lessons = LEVELS[level];
   const isLastLesson = current === lessons[lessons.length - 1].id;
 
@@ -772,52 +759,50 @@ export function Dictionary() {
 
 
 export function Quiz() {
-  const [quiz, setQuiz] = useState([]); 
+  const [quiz, setQuiz] = useState([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [level, setLevel] = useState(null); // beginner/intermediate/advanced
+
+ 
+  const urlMap = {
+    beginner: "http://localhost:5000/quiz/showSigns/1",
+    intermediate: "http://localhost:5000/quiz/showSigns/2",
+    advanced: "http://localhost:5000/quiz/showSigns/3",
+  };
+
+ 
   useEffect(() => {
+    if (!level) return;
+
     let isCancelled = false;
-    
     const loadQuiz = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:5000/quiz/showSigns/1");
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
+        const response = await fetch(urlMap[level]);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        
+
         if (!isCancelled) {
-          if (!data.quiz || !Array.isArray(data.quiz)) {
-            throw new Error('Invalid quiz data structure');
-          }
-          
           const transformed = data.quiz.map(q => {
-            if (!q.question || !q.choices || !Array.isArray(q.choices)) {
-              throw new Error('Invalid question structure');
-            }
-            
             const answerIndex = q.choices.indexOf(q.answer);
-            if (answerIndex === -1) {
-              console.warn('Answer not found in choices:', q);
-            }
-            
             return {
-              q: q.question,       
-              choices: q.choices,  
-              answer: Math.max(0, answerIndex)
+              q: q.question,
+              choices: q.choices,
+              answer: Math.max(0, answerIndex),
             };
           });
-          
           setQuiz(transformed);
           setLoading(false);
+          setIndex(0);
+          setSelected(null);
+          setScore(0);
+          setDone(false);
         }
       } catch (err) {
         if (!isCancelled) {
@@ -827,14 +812,37 @@ export function Quiz() {
         }
       }
     };
-    
-    loadQuiz();
-    
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
 
+    loadQuiz();
+    return () => { isCancelled = true; };
+  }, [level]);
+
+  if (!level) {
+    // LEVEL SELECTION SCREEN
+    return (
+      <section
+        className="section"
+        style={{
+          marginBottom: "265px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          transform: "translateY(100px)",
+        }}
+      >
+        <h2 style={{ fontSize: "30px", marginBottom: "20px" }}>اختر مستواك</h2>
+        <div className="row gap" style={{ justifyContent: "center", gap: "20px" }}>
+          <Button onClick={() => setLevel("beginner")}>مبتدئ</Button>
+          <Button onClick={() => setLevel("intermediate")}>متوسط</Button>
+          <Button onClick={() => setLevel("advanced")}>محترف</Button>
+        </div>
+      </section>
+    );
+  }
+
+  // QUIZ DISPLAY
   if (loading) return <p>Loading your quiz...</p>;
   if (error) return <p>Error loading quiz: {error}</p>;
   if (quiz.length === 0) return <p>No quiz questions available.</p>;
@@ -853,11 +861,11 @@ export function Quiz() {
     }
   };
 
-  const restart = () => { 
-    setIndex(0); 
-    setSelected(null); 
-    setScore(0); 
-    setDone(false); 
+  const restart = () => {
+    setIndex(0);
+    setSelected(null);
+    setScore(0);
+    setDone(false);
   };
 
   return (
@@ -881,7 +889,7 @@ export function Quiz() {
                   >
                     <span style={{ marginRight: "5px" }}>{String.fromCharCode(0x0661 + i)}.</span>
                     <img
-                      src={c}                   
+                      src={c}
                       alt={`choice ${i}`}
                       style={{ width: "80px", height: "80px", objectFit: "cover" }}
                     />
@@ -889,15 +897,10 @@ export function Quiz() {
                 ))}
               </div>
               <div className="row gap">
-                <Button 
-                  className="rounded btn-glow" 
-                  onClick={submit}
-                  disabled={selected === null}
-                >
+                <Button className="rounded btn-glow" onClick={submit} disabled={selected === null}>
                   تأكيد الإجابة
                 </Button>
               </div>
-              
               <div className="muted small">سؤال {index + 1} من {quiz.length}</div>
             </div>
           ) : (
@@ -912,6 +915,7 @@ export function Quiz() {
     </section>
   );
 }
+
 
 export function Practice() {
   const [note, setNote] = useState("");
