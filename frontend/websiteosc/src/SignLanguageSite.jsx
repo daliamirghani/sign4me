@@ -1,6 +1,7 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect, useRef  } from "react";
+import { useParams } from "react-router-dom";
+
 import "./SignLanguageSite.css";
-import { transform } from "framer-motion";
 
 
 const LESSONS = [
@@ -771,17 +772,80 @@ export function Dictionary() {
 
 
 export function Quiz() {
+  const [quiz, setQuiz] = useState([]); 
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const q = QUIZ[index];
+  useEffect(() => {
+    let isCancelled = false;
+    
+    const loadQuiz = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("http://localhost:5000/quiz/showSigns/1");
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!isCancelled) {
+          if (!data.quiz || !Array.isArray(data.quiz)) {
+            throw new Error('Invalid quiz data structure');
+          }
+          
+          const transformed = data.quiz.map(q => {
+            if (!q.question || !q.choices || !Array.isArray(q.choices)) {
+              throw new Error('Invalid question structure');
+            }
+            
+            const answerIndex = q.choices.indexOf(q.answer);
+            if (answerIndex === -1) {
+              console.warn('Answer not found in choices:', q);
+            }
+            
+            return {
+              q: q.question,       
+              choices: q.choices,  
+              answer: Math.max(0, answerIndex)
+            };
+          });
+          
+          setQuiz(transformed);
+          setLoading(false);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          console.error('Quiz loading error:', err);
+          setError(err.message);
+          setLoading(false);
+        }
+      }
+    };
+    
+    loadQuiz();
+    
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  if (loading) return <p>Loading your quiz...</p>;
+  if (error) return <p>Error loading quiz: {error}</p>;
+  if (quiz.length === 0) return <p>No quiz questions available.</p>;
+
+  const q = quiz[index];
+  if (!q) return <p>Quiz data error.</p>;
 
   const submit = () => {
     if (selected === null) return;
     if (selected === q.answer) setScore((s) => s + 1);
-    if (index + 1 < QUIZ.length) {
+    if (index + 1 < quiz.length) {
       setIndex((i) => i + 1);
       setSelected(null);
     } else {
@@ -789,7 +853,12 @@ export function Quiz() {
     }
   };
 
-  const restart = () => { setIndex(0); setSelected(null); setScore(0); setDone(false); };
+  const restart = () => { 
+    setIndex(0); 
+    setSelected(null); 
+    setScore(0); 
+    setDone(false); 
+  };
 
   return (
     <section className="section" dir="rtl">
@@ -810,20 +879,30 @@ export function Quiz() {
                     className="rounded left hover-move"
                     onClick={() => setSelected(i)}
                   >
-                    {String.fromCharCode(0x0661 + i)}. {c}
+                    <span style={{ marginRight: "5px" }}>{String.fromCharCode(0x0661 + i)}.</span>
+                    <img
+                      src={c}                   
+                      alt={`choice ${i}`}
+                      style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                    />
                   </Button>
                 ))}
               </div>
               <div className="row gap">
-                <Button className="rounded btn-glow" onClick={submit}>تأكيد الإجابة</Button>
-                
+                <Button 
+                  className="rounded btn-glow" 
+                  onClick={submit}
+                  disabled={selected === null}
+                >
+                  تأكيد الإجابة
+                </Button>
               </div>
               
-              <div className="muted small">سؤال {index + 1} من {QUIZ.length}</div>
+              <div className="muted small">سؤال {index + 1} من {quiz.length}</div>
             </div>
           ) : (
             <div className="center col gap">
-              <div className="score pop">نتيجتك: {score} / {QUIZ.length}</div>
+              <div className="score pop">نتيجتك: {score} / {quiz.length}</div>
               <div className="muted">أحسنت! تابع التعلّم عبر الدروس والقاموس.</div>
               <Button className="rounded" onClick={restart}>إعادة الاختبار</Button>
             </div>
@@ -833,7 +912,6 @@ export function Quiz() {
     </section>
   );
 }
-
 
 export function Practice() {
   const [note, setNote] = useState("");
