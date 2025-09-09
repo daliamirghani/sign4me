@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef  } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import api from "./auth.api";
 import { User } from "lucide-react";
@@ -201,16 +201,16 @@ export function useRevealOnScroll(watch) {
 
     const io = "IntersectionObserver" in window
       ? new IntersectionObserver(
-          (entries) => {
-            entries.forEach((e) => {
-              if (e.isIntersecting) {
-                e.target.classList.add("is-visible");
-                io.unobserve(e.target);
-              }
-            });
-          },
-          { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
-        )
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
+      )
       : null;
 
     const wire = () => {
@@ -355,100 +355,108 @@ export function AuthPage({ mode, setActive }) {
   };
 
   return (
-    <section className="section" dir="rtl">
-      <div className="container grid-auth">
-        <Card className="rounded auth-card" data-reveal style={{ width: "150%" }}>
-          <CardHeader>
-            <CardTitle className="text-xl">
-              {isSignUp ? "إنشاء حساب جديد (Sign up)" : "تسجيل الدخول (Log in)"}
-            </CardTitle>
-          </CardHeader>
 
-          <CardContent>
-            <form className="form col gap" onSubmit={registration} noValidate>
-              {isSignUp && (
-                <div className={`field ${errors.name ? "has-error" : ""}`}>
-                  <label className="label">الاسم الكامل</label>
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="مثال: أحمد علي"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                  {errors.name && <div className="error">{errors.name}</div>}
-                </div>
-              )}
+    <section className="section " dir="rtl" >
+      <div className="container ">
+        <div className="row justify-content-center" style={{ width: "74%" }}>
+          <div className="" style={{ margin: "auto", width: "74%" }}>
+            <Card className="rounded auth-card" data-reveal style={{ width: "150%" }}>
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  {isSignUp ? "إنشاء حساب جديد (Sign up)" : "تسجيل الدخول (Log in)"}
+                </CardTitle>
+              </CardHeader>
 
-              <div className={`field ${errors.email ? "has-error" : ""}`}>
-                <label className="label">البريد الإلكتروني</label>
-                <input
-                  className="input"
-                  type="email"
-                  placeholder="example@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {errors.email && <div className="error">{errors.email}</div>}
-              </div>
-
-              <div className={`field ${errors.password ? "has-error" : ""}`}>
-                <label className="label">كلمة المرور</label>
-                <div className="input-with-btn">
-                  <input
-                    className="input"
-                    type={showPass ? "text" : "password"}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="rounded btn-icon"
-                    onClick={() => setShowPass((s) => !s)} >
-                    {showPass ? (
-                      <img src="/eye1.png" alt="logo" width={20} />
-                    ) : (
-                      <img src="/eye.png" alt="logo" width={18} />
+              <CardContent>
+                <div  >
+                  <form className="form col gap" onSubmit={registration} noValidate>
+                    {isSignUp && (
+                      <div className={`field ${errors.name ? "has-error" : ""}`}>
+                        <label className="label">الاسم الكامل</label>
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="مثال: أحمد علي"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                        {errors.name && <div className="error">{errors.name}</div>}
+                      </div>
                     )}
-                  </Button>
+
+                    <div className={`field ${errors.email ? "has-error" : ""}`}>
+                      <label className="label">البريد الإلكتروني</label>
+                      <input
+                        className="input"
+                        type="email"
+                        placeholder="example@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      {errors.email && <div className="error">{errors.email}</div>}
+                    </div>
+
+                    <div className={`field ${errors.password ? "has-error" : ""}`}>
+                      <label className="label">كلمة المرور</label>
+                      <div className="input-with-btn">
+                        <input
+                          className="input"
+                          type={showPass ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="rounded btn-icon"
+                          onClick={() => setShowPass((s) => !s)} >
+                          {showPass ? (
+                            <img src="/eye1.png" alt="logo" width={20} />
+                          ) : (
+                            <img src="/eye.png" alt="logo" width={18} />
+                          )}
+                        </Button>
+                      </div>
+                      {errors.password && <div className="error">{errors.password}</div>}
+                    </div>
+
+                    {isSignUp && (
+                      <div className={`field row gap items-center ${errors.agree ? "has-error" : ""}`}>
+                        <input
+                          id="agree"
+                          type="checkbox"
+                          className="checkbox"
+                          checked={agree}
+                          onChange={(e) => setAgree(e.target.checked)}
+                        />
+                        <label htmlFor="agree" className="small">
+                          أوافق على شروط الاستخدام وسياسة الخصوصية
+                        </label>
+                        {errors.agree && <div className="error">{errors.agree}</div>}
+                      </div>
+                    )}
+
+                    <Button className="rounded btn-glow" type="submit">
+                      {isSignUp ? "إنشاء حساب" : "تسجيل الدخول"}
+                    </Button>
+                  </form>
                 </div>
-                {errors.password && <div className="error">{errors.password}</div>}
-              </div>
+                {message && <p className="mt-3">{message}</p>}
+              </CardContent>
 
-              {isSignUp && (
-                <div className={`field row gap items-center ${errors.agree ? "has-error" : ""}`}>
-                  <input
-                    id="agree"
-                    type="checkbox"
-                    className="checkbox"
-                    checked={agree}
-                    onChange={(e) => setAgree(e.target.checked)}
-                  />
-                  <label htmlFor="agree" className="small">
-                    أوافق على شروط الاستخدام وسياسة الخصوصية
-                  </label>
-                  {errors.agree && <div className="error">{errors.agree}</div>}
-                </div>
-              )}
-
-              <Button className="rounded btn-glow" type="submit">
-                {isSignUp ? "إنشاء حساب" : "تسجيل الدخول"}
-              </Button>
-            </form>
-
-            {message && <p className="mt-3">{message}</p>}
-          </CardContent>
-
-          <CardFooter className="muted small">
-            {isSignUp
-              ? "لديك حساب؟ اختر Log in من أعلى الصفحة."
-              : "ليس لديك حساب؟ اختر Sign up من أعلى الصفحة."}
-          </CardFooter>
-        </Card>
+              <CardFooter className="muted small">
+                {isSignUp
+                  ? "لديك حساب؟ اختر Log in من أعلى الصفحة."
+                  : "ليس لديك حساب؟ اختر Sign up من أعلى الصفحة."}
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
       </div>
     </section>
+
+
   );
 }
 
@@ -516,7 +524,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           >
             Log in
           </Button>
-        {/* dark/light mode button*/}
+          {/* dark/light mode button*/}
           <Button
             variant="outline"
             className="rounded"
@@ -558,7 +566,7 @@ export function SignBanner() {
   return (
     <div className="sign-banner" data-reveal aria-label={PHRASE}>
       <div className="logo glow">
-        <img src="/hand.png" alt="logo" width={23}/>
+        <img src="/hand.png" alt="logo" width={23} />
       </div>
       <div className="sign-phrase">
         {PHRASE.split(" ").map((word, i) => (
@@ -569,9 +577,9 @@ export function SignBanner() {
 
       </div>
       <div className="sign-hands">
-        <span className="hand"><img src="/ok.png" alt="logo" width={23}/></span>
-        <span className="hand"><img src="/letter-i.png" alt="logo" width={23}/></span>
-        <span className="hand"><img src="/letter-v.png" alt="logo" width={23}/></span>
+        <span className="hand"><img src="/ok.png" alt="logo" width={23} /></span>
+        <span className="hand"><img src="/letter-i.png" alt="logo" width={23} /></span>
+        <span className="hand"><img src="/letter-v.png" alt="logo" width={23} /></span>
       </div>
     </div>
   );
@@ -590,7 +598,7 @@ export function Hero({ goLessons }) {
             </Button>
           </div>
           <div className="row gap mt-6 small muted" data-reveal>
-             دروس فيديو •  تمارين قصيرة •  قاموس مرئي
+            دروس فيديو •  تمارين قصيرة •  قاموس مرئي
           </div>
         </div>
 
@@ -639,7 +647,7 @@ export function Lessons() {
   };
 
   if (!level) {
-  
+
     return (
       <section
         className="section"
@@ -667,24 +675,23 @@ export function Lessons() {
 
   return (
     <section className="section" dir="rtl">
-      <div className="container grid-2 gap-6"style={{gap: "20px"}}>
-        <div className="flex flex-col gap-4" style={{gap: "30px"}}>
+      <div className="container grid-2 gap-6" style={{ gap: "20px" }}>
+        <div className="flex flex-col gap-4" style={{ gap: "30px" }}>
           {lessons.map((l) => {
             const locked = !unlocked[l.id];
             return (
               <Card
                 key={l.id}
-                className={`clickable ${current === l.id ? "ring" : ""} ${
-                  locked ? "opacity-50 cursor-not-allowed" : ""
-                }`} 
+                className={`clickable ${current === l.id ? "ring" : ""} ${locked ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 onClick={() => {
                   if (!locked) setCurrent(l.id);
                 }}
-                style={{marginBottom: "20px"}}
+                style={{ marginBottom: "20px" }}
               >
                 <CardHeader>
                   <CardTitle className="row gap">
-                    <span>{locked ? <img src="/lock-padlock-symbol-for-security-interface.png" alt="logo" width={23}/> : <img src="/eye.png" alt="logo" width={23}/>}</span>
+                    <span>{locked ? <img src="/lock-padlock-symbol-for-security-interface.png" alt="logo" width={23} /> : <img src="/eye.png" alt="logo" width={23} />}</span>
                     <span>{l.title}</span>
                   </CardTitle>
                   <CardDescription>
@@ -717,11 +724,11 @@ export function Lessons() {
                     <Button onClick={finishLesson}>إنهاء الدرس</Button>
                   ) : level !== "advanced" ? (
                     <Button onClick={goToNextLevel}>
-                       الانتقال إلى المستوى التالي
+                      الانتقال إلى المستوى التالي
                     </Button>
                   ) : (
                     <span className="font-bold text-green-600">
-                       مبروك! أنهيت جميع المستويات
+                      مبروك! أنهيت جميع المستويات
                     </span>
                   )}
                 </div>
@@ -748,18 +755,18 @@ export function Dictionary() {
   useEffect(() => localStorage.setItem("favSigns", JSON.stringify(favs)), [favs]);
 
   useEffect(() => {
-  setLoading(true);
-  fetch("http://localhost:5000/data/level/1")
-    .then((res) => res.json())
-    .then((json) => {
-      setSigns(json[0]?.signs || []);
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error("Error fetching data:", err);
-      setLoading(false);
-    });
-}, []);
+    setLoading(true);
+    fetch("http://localhost:5000/data/level/1")
+      .then((res) => res.json())
+      .then((json) => {
+        setSigns(json[0]?.signs || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+        setLoading(false);
+      });
+  }, []);
 
 
   const data = useMemo(() => {
@@ -788,7 +795,7 @@ export function Dictionary() {
         <CardContent>
           <div className="row wrap gap">
             <div className="input-wrap">
-              <span className="input-icon"><img src="/search.png" alt="logo" width={20}/></span>
+              <span className="input-icon"><img src="/search.png" alt="logo" width={20} /></span>
               <input
                 dir="rtl"
                 placeholder="ابحث عن كلمة..."
@@ -807,7 +814,7 @@ export function Dictionary() {
             </div>
           </div>
 
-          <div className="cards-grid" style={{marginTop: "20px"}}>
+          <div className="cards-grid" style={{ marginTop: "20px" }}>
             {data.map((item) => (
               <Card key={item.id} className="rounded column" data-reveal>
                 <CardHeader className="pb-0">
@@ -830,34 +837,34 @@ export function Dictionary() {
                   <VideoFrame src={item.video} title={item.arabic} />
                 </CardContent>
               </Card>
-              
-              
+
+
             ))}
           </div>
-            <section className="section" style={{ marginTop: "40px" }}>
-  <h2 className="text-xl font-bold mb-4">الإشارات بالصور</h2>
-  <div className="cards-grid">
-    {signs.map((item, i) => (
-      <Card key={i} className="rounded column center" data-reveal>
-        <CardHeader className="pb-0 center">
-          <img
-            src={item.signImage}     // الصورة من الـ API
-            alt={item.answer}        // النص البديل هو الترجمة
-            className="rounded"
-            style={{ width: "100%", height: "180px", objectFit: "cover" }}
-          />
-        </CardHeader>
-        <CardContent className="center column">
-          <CardTitle className="text-lg">{item.answer}</CardTitle> {/* الترجمة تحت الصورة */}
-          <CardDescription>{item.category}</CardDescription>       {/* هنا ممكن تعرض الـ category */}
-        </CardContent>
-      </Card>
-    ))}
-  </div>
-</section>
+          <section className="section" style={{ marginTop: "40px" }}>
+            <h2 className="text-xl font-bold mb-4">الإشارات بالصور</h2>
+            <div className="cards-grid">
+              {signs.map((item, i) => (
+                <Card key={i} className="rounded column center" data-reveal>
+                  <CardHeader className="pb-0 center">
+                    <img
+                      src={item.signImage}     // الصورة من الـ API
+                      alt={item.answer}        // النص البديل هو الترجمة
+                      className="rounded"
+                      style={{ width: "100%", height: "180px", objectFit: "cover" }}
+                    />
+                  </CardHeader>
+                  <CardContent className="center column">
+                    <CardTitle className="text-lg">{item.answer}</CardTitle> {/* الترجمة تحت الصورة */}
+                    <CardDescription>{item.category}</CardDescription>       {/* هنا ممكن تعرض الـ category */}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
 
 
-          
+
 
           {data.length === 0 && <div className="center muted py-10">لا توجد نتائج مطابقة لبحثك.</div>}
         </CardContent>
@@ -880,14 +887,14 @@ export function Quiz() {
 
   const [level, setLevel] = useState(null); // beginner/intermediate/advanced
 
- 
+
   const urlMap = {
     beginner: "http://localhost:5000/data/quiz/showSigns/1",
     intermediate: "http://localhost:5000/data/quiz/showSigns/2",
     advanced: "http://localhost:5000/data/quiz/showSigns/3",
   };
 
- 
+
   useEffect(() => {
     if (!level) return;
 
@@ -1034,9 +1041,9 @@ export function Practice() {
   const [copied, setCopied] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const copy = async () => {
-    try { await navigator.clipboard?.writeText(note); setCopied(true); setTimeout(() => setCopied(false), 1200); } catch {}
+    try { await navigator.clipboard?.writeText(note); setCopied(true); setTimeout(() => setCopied(false), 1200); } catch { }
   };
-    if (showCamera) {
+  if (showCamera) {
     return <CameraPractice onBack={() => setShowCamera(false)} />; // لو ضغط الزرار نروح للكاميرا
   }
   return (
@@ -1044,7 +1051,7 @@ export function Practice() {
       <div className="container grid-2-60">
         <Card className="rounded" data-reveal>
           <CardHeader>
-            
+
             <CardDescription>سجل ملاحظاتك</CardDescription>
           </CardHeader>
           <CardContent className="col gap">
@@ -1068,7 +1075,7 @@ export function Practice() {
           </CardHeader>
           <CardContent className="col gap">
             <VideoFrame src="https://www.youtube.com/embed/zm8NORWwqYY?list=PLbDJL_fJwCrD3WAqwdtO7qzkK3pyhTIJP" title="Practice" />
-            
+
             <div className="row gap items-center">
               <input
                 id="consent"
@@ -1079,8 +1086,14 @@ export function Practice() {
               />
               <label htmlFor="consent" className="small">أوافق على استخدام الكاميرا للتجارب التعليمية على جهازي فقط</label>
             </div>
-            <div className="grid-2 gap">
-              <Button disabled={!accepted} className="rounded" style={{width: "210%"}} onClick={() => setShowCamera(true)} >فتح الكاميرا</Button>
+            <div className="w-100" style={{ maxWidth: "100%", display: "flex" }}>
+              <Button
+                disabled={!accepted}
+                className="rounded btn-glow"
+                style={{ width: "100%" }}
+                onClick={() => setShowCamera(true)} >
+                  فتح الكاميرا
+              </Button>
             </div>
           </CardContent>
         </Card>
