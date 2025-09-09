@@ -467,7 +467,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           <div className="logo glow">
             <img src="/hand.png" alt="logo" width={23} />
           </div>
-          <span className="brand-name gradient-text">إشارة</span>
+          <span className="brand-name gradient-text">قولها بإيدك</span>
         </div>
 
         <nav className="nav flex gap-2">
