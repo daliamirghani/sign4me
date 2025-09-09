@@ -90,7 +90,7 @@ const LEVELS = {
       level: "محترف",
       duration: "2 دقائق",
       video: "https://www.youtube.com/embed/Ra7InNWDRhs?si=LCFtD9dPV0BUGgnf",
-      points: [ "أسامي أعضاء الأسرة "],
+      points: ["أسامي أعضاء الأسرة "],
     },
     {
       id: "a2",
@@ -457,7 +457,7 @@ export function AuthPage({ mode, setActive }) {
 export function TopNav({ active, setActive, dark, toggleDark }) {
   const currentUser = localStorage.getItem("username");
   const [menuOpen, setMenuOpen] = useState(false);
-  
+
   const items = [
     { key: "home", label: "الرئيسية" },
     { key: "lessons", label: "الدروس" },
@@ -472,8 +472,10 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
     setActive("signin");
   };
   return (
-    <div className="topnav navbar navbar-expand-lg fixed-top" >
+    <div className="topnav navbar fixed-top">
       <div className="container flex items-center justify-between">
+
+        {/* Brand */}
         <div className="brand flex items-center gap-2 cursor-pointer" onClick={() => setActive("home")}>
           <div className="logo glow">
             <img src="/hand.png" alt="logo" width={23} />
@@ -481,7 +483,55 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           <span className="brand-name gradient-text">قولها بإيدك</span>
         </div>
 
-        <nav className="nav flex gap-2">
+
+
+        <div className="actions flex items-center gap-3">
+          <Button
+            variant={active === "signin" ? "default" : "outline"}
+            className="rounded"
+            onClick={() => setActive("signin")}
+          >
+            Sign up
+          </Button>
+          <Button
+            variant={active === "login" ? "default" : "outline"}
+            className="rounded"
+            onClick={() => setActive("login")}
+          >
+            Log in
+          </Button>
+          <Button
+            variant="outline"
+            className="rounded"
+            onClick={toggleDark}
+            aria-label="تبديل الوضع الداكن"
+            title="تبديل الوضع"
+          >
+            {dark ? <img src="/sun.png" alt="" width={17} /> : <img src="/crescent-moon.png" alt="" width={17} />}
+          </Button>
+
+          {currentUser && (
+            <div className="user-info flex items-center bg-gray-100 px-3 py-1 rounded-full shadow-sm">
+              <User
+                size={30}
+                color="gray"
+                className="rounded-full bg-white p-1"
+                variant="outline"
+              />
+              <span className="text-gray-800 font-medium ml-2">{currentUser}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Hamburger */}
+        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        {/* Nav links */}
+        <nav className={`nav flex gap-2 ${menuOpen ? "active" : ""}`}>
           {items.map(({ key, label, icon }) => (
             <Button
               key={key}
@@ -493,65 +543,9 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             </Button>
           ))}
         </nav>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {/* sign up button*/}
-          <Button
-            variant={active === "signin" ? "default" : "outline"}
-            className="rounded"
-            onClick={() => setActive("signin")}
-          >
-            Sign up
-          </Button>
-          {/* sign out button*/}
-          <Button
-            variant="outline"
-            className="rounded"
-            onClick={signOut}
-          >
-            Sign out
-          </Button>
-          {/* login button*/}
-          <Button
-            variant={active === "login" ? "default" : "outline"}
-            className="rounded"
-            onClick={() => setActive("login")}
-          >
-            Log in
-          </Button>
-          {/* dark/light mode button*/}
-          <Button
-            variant="outline"
-            className="rounded"
-            onClick={toggleDark}
-            aria-label="تبديل الوضع الداكن"
-            title="تبديل الوضع"
-            style={{ transform: "translate(-90px,0px)", marginRight: 10 }}
-          >
-            {dark
-              ? <img src="/sun.png" alt="" width={17} />
-              : <img src="/crescent-moon.png" alt="" width={17} />}
-          </Button>
-
-          {/* User info */}
-
-          {currentUser && (
-            <div className="flex items-center bg-gray-100 px-3 py-1 rounded-full shadow-sm w-max">
-              <User
-                size={30}
-                color="gray"
-                className="rounded-full bg-white p-1"
-                variant="outline"
-                style={{ marginRight: -80 }}
-              />
-              <span className="text-gray-800 font-medium">{currentUser}</span>
-            </div>
-          )}
-
-        </div>
-
       </div>
     </div>
+
   );
 }
 
@@ -690,8 +684,7 @@ export function Lessons() {
             return (
               <Card
                 key={l.id}
-                className={`clickable ${current === l.id ? "ring" : ""} ${
-                  locked ? "opacity-50 cursor-not-allowed" : "" }`} 
+                className={`clickable ${current === l.id ? "ring" : ""} ${locked ? "opacity-50 cursor-not-allowed" : ""}`}
                 onClick={() => {
                   if (!locked) setCurrent(l.id);
                 }}
@@ -1101,7 +1094,7 @@ export function Practice() {
                 className="rounded btn-glow"
                 style={{ width: "100%" }}
                 onClick={() => setShowCamera(true)} >
-                  فتح الكاميرا
+                فتح الكاميرا
               </Button>
             </div>
           </CardContent>

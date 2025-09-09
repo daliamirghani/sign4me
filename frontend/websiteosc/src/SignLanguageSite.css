@@ -42,7 +42,7 @@ body{
 }
 
 /* Containers & Layout */
-.container{max-width:1100px;margin:0 auto;padding:0 20px}
+.container{max-width:1100px;margin:0 auto;padding:0 20px;flex-wrap: nowrap; }
 .section{padding:56px 0}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .grid-2-60{display:grid;grid-template-columns:1fr 1fr;gap:24px}
@@ -419,4 +419,83 @@ body{
 }
 @media (max-width: 500px){
   .footer-top, .footer-bottom { flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+}
+
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  width: 28px;
+  height: 24px;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* Nav default: horizontal */
+.topnav .nav {
+  display: flex;
+  gap: 12px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 920px) {
+  .hamburger { display: flex; }
+
+  .topnav .nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--surface);
+    flex-direction: column;
+    gap: 0;
+    width: 200px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-2);
+  }
+
+  .topnav .nav.active {
+    max-height: 500px; /* يكفي جميع الروابط */
+    opacity: 1;
+  }
+
+  .topnav .nav .nav-link {
+    width: 100%;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topnav .nav .nav-link:last-child {
+    border-bottom: none;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .actions { flex-direction: column; gap: 10px; }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* نفس gap-3 */
+  min-width: 0;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* أو margin-left */
 }

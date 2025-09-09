@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  width: 28px;
+  height: 24px;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+
+@media (max-width: 920px){
+  .hamburger { display: flex; }
+  .topnav .nav { display: none; flex-direction: column; gap: 10px; }
+  .topnav .nav.active { display: flex; }
+}
