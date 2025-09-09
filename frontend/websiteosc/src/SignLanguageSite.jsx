@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import api from "./auth.api";
 import { User } from "lucide-react";
 
+
 import "./SignLanguageSite.css";
 
 
@@ -455,7 +456,8 @@ export function AuthPage({ mode, setActive }) {
 
 export function TopNav({ active, setActive, dark, toggleDark }) {
   const currentUser = localStorage.getItem("username");
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  
   const items = [
     { key: "home", label: "الرئيسية" },
     { key: "lessons", label: "الدروس" },
@@ -470,7 +472,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
     setActive("signin");
   };
   return (
-    <div className="topnav">
+    <div className="topnav navbar navbar-expand-lg fixed-top" >
       <div className="container flex items-center justify-between">
         <div className="brand flex items-center gap-2 cursor-pointer" onClick={() => setActive("home")}>
           <div className="logo glow">
