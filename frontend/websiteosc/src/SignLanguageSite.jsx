@@ -535,8 +535,8 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           {currentUser && (
             <div className="flex items-center bg-gray-100 px-3 py-1 rounded-full shadow-sm w-max">
               <User
-                size={28}
-                color="#1F2937"
+                size={30}
+                color="gray"
                 className="rounded-full bg-white p-1"
                 variant="outline"
                 style={{ marginRight: -80 }}
