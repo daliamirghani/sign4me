@@ -749,7 +749,7 @@ export function Dictionary() {
 
   useEffect(() => {
   setLoading(true);
-  fetch("http://localhost:5000/api/data/level/1")
+  fetch("http://localhost:5000/data/level/1")
     .then((res) => res.json())
     .then((json) => {
       setSigns(json[0]?.signs || []);
