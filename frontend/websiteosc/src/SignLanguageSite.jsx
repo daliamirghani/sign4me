@@ -681,6 +681,8 @@ export function Lessons() {
 
 export function Dictionary() {
   const [q, setQ] = useState("");
+  const [signs, setSigns] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [tag, setTag] = useState("الكل");
   const [favs, setFavs] = useState(() => {
     try { return JSON.parse(localStorage.getItem("favSigns") || "[]"); } catch { return []; }
@@ -688,6 +690,21 @@ export function Dictionary() {
   const [toast, setToast] = useState("");
 
   useEffect(() => localStorage.setItem("favSigns", JSON.stringify(favs)), [favs]);
+
+  useEffect(() => {
+  setLoading(true);
+  fetch("http://localhost:5000/api/data/level/1")
+    .then((res) => res.json())
+    .then((json) => {
+      setSigns(json[0]?.signs || []);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Error fetching data:", err);
+      setLoading(false);
+    });
+}, []);
+
 
   const data = useMemo(() => {
     const t = tag === "الكل" ? DICT : DICT.filter((d) => d.topic === tag);
@@ -757,8 +774,34 @@ export function Dictionary() {
                   <VideoFrame src={item.video} title={item.arabic} />
                 </CardContent>
               </Card>
+              
+              
             ))}
           </div>
+            <section className="section" style={{ marginTop: "40px" }}>
+  <h2 className="text-xl font-bold mb-4">الإشارات بالصور</h2>
+  <div className="cards-grid">
+    {signs.map((item, i) => (
+      <Card key={i} className="rounded column center" data-reveal>
+        <CardHeader className="pb-0 center">
+          <img
+            src={item.signImage}     // الصورة من الـ API
+            alt={item.answer}        // النص البديل هو الترجمة
+            className="rounded"
+            style={{ width: "100%", height: "180px", objectFit: "cover" }}
+          />
+        </CardHeader>
+        <CardContent className="center column">
+          <CardTitle className="text-lg">{item.answer}</CardTitle> {/* الترجمة تحت الصورة */}
+          <CardDescription>{item.category}</CardDescription>       {/* هنا ممكن تعرض الـ category */}
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+</section>
+
+
+          
 
           {data.length === 0 && <div className="center muted py-10">لا توجد نتائج مطابقة لبحثك.</div>}
         </CardContent>
