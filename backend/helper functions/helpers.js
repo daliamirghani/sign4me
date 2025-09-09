@@ -16,7 +16,7 @@ const makeQuiz = (array, mode) => {
 if (mode === 1) { // question is a word
   question = array[i].answer;
 
-  let choices = options.map(item => item.signImage); // 3 random wrongs
+  choices = options.map(item => item.signImage); // 3 random wrongs
   choices.push(array[i].signImage);                  // add the right answer
   choices = shuffle(choices);                     
 

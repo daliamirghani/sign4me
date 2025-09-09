@@ -1,6 +1,9 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect, useRef  } from "react";
+import { useParams } from "react-router-dom";
+import api from "./auth.api";
+import { User } from "lucide-react";
+
 import "./SignLanguageSite.css";
-import { transform } from "framer-motion";
 
 
 const LESSONS = [
@@ -292,49 +295,78 @@ export function VideoFrame({ src, title }) {
 }
 
 
-export function AuthPage({ mode = "login" }) {
-  const isSignIn = mode === "signin";
+export function AuthPage({ mode, setActive }) {
+  const isSignUp = mode === "signin";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [name, setName] = useState("");
   const [agree, setAgree] = useState(false);
   const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
 
   const validate = () => {
     const e = {};
-    if (isSignIn && !name.trim()) e.name = "الاسم مطلوب";
+    if (isSignUp && !name.trim()) e.name = "الاسم مطلوب";
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) e.email = "بريد إلكتروني غير صالح";
     if (password.length < 6) e.password = "كلمة المرور يجب ألا تقل عن 6 أحرف";
-    if (isSignIn && !agree) e.agree = "يجب الموافقة على الشروط";
+    if (isSignUp && !agree) e.agree = "يجب الموافقة على الشروط";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  const submit = (ev) => {
+  const registration = async (ev) => {
     ev.preventDefault();
     if (!validate()) return;
-    if (isSignIn) {
-      alert(`تم إنشاء الحساب بنجاح:\n${name} — ${email}`);
-    } else {
-      alert(`تم تسجيل الدخول بنجاح:\n${email}`);
+
+    try {
+      if (isSignUp) {
+        // create account 
+        const res = await api.post("/signup", {
+          username: name,
+          email,
+          password,
+        });
+        setMessage("تم إنشاء الحساب بنجاح");
+        console.log("Signup response:", res.data);
+        setActive("login");
+
+
+      } else {
+        // sign in
+        const res = await api.post("/signin", {
+          email,
+          password,
+        });
+        setMessage("تم تسجيل الدخول بنجاح");
+        console.log("Signin response:", res.data);
+
+
+        setCurrentUser(res.data.username);
+        localStorage.setItem("username", res.data.data.username);
+        setActive("home");
+      }
+
+    } catch (err) {
+      console.error("Error:", err.response?.data || err.message);
+      setMessage(" حصل خطأ: " + (err.response?.data?.msg || "Server error"));
     }
   };
 
   return (
     <section className="section" dir="rtl">
       <div className="container grid-auth">
-        <Card className="rounded auth-card" data-reveal style={{width: "150%"}}>
+        <Card className="rounded auth-card" data-reveal style={{ width: "150%" }}>
           <CardHeader>
             <CardTitle className="text-xl">
-              {isSignIn ? "إنشاء حساب جديد (Sign in)" : "تسجيل الدخول (Log in)"}
+              {isSignUp ? "إنشاء حساب جديد (Sign up)" : "تسجيل الدخول (Log in)"}
             </CardTitle>
-            
           </CardHeader>
 
           <CardContent>
-            <form className="form col gap" onSubmit={submit} noValidate>
-              {isSignIn && (
+            <form className="form col gap" onSubmit={registration} noValidate>
+              {isSignUp && (
                 <div className={`field ${errors.name ? "has-error" : ""}`}>
                   <label className="label">الاسم الكامل</label>
                   <input
@@ -374,17 +406,18 @@ export function AuthPage({ mode = "login" }) {
                     type="button"
                     variant="outline"
                     className="rounded btn-icon"
-                    onClick={() => setShowPass((s) => !s)}
-                    ariaLabel="إظهار/إخفاء كلمة المرور"
-                    title="إظهار/إخفاء كلمة المرور"
-                  >
-                    {showPass ? <img src="/eye1.png" alt="logo" width={20}/> : <img src="/eye.png" alt="logo" width={18}/>}
+                    onClick={() => setShowPass((s) => !s)} >
+                    {showPass ? (
+                      <img src="/eye1.png" alt="logo" width={20} />
+                    ) : (
+                      <img src="/eye.png" alt="logo" width={18} />
+                    )}
                   </Button>
                 </div>
                 {errors.password && <div className="error">{errors.password}</div>}
               </div>
 
-              {isSignIn && (
+              {isSignUp && (
                 <div className={`field row gap items-center ${errors.agree ? "has-error" : ""}`}>
                   <input
                     id="agree"
@@ -401,37 +434,46 @@ export function AuthPage({ mode = "login" }) {
               )}
 
               <Button className="rounded btn-glow" type="submit">
-                {isSignIn ? "إنشاء حساب" : "تسجيل الدخول"}
+                {isSignUp ? "إنشاء حساب" : "تسجيل الدخول"}
               </Button>
             </form>
+
+            {message && <p className="mt-3">{message}</p>}
           </CardContent>
 
           <CardFooter className="muted small">
-            {isSignIn ? "لديك حساب؟ اختر Log in من أعلى الصفحة." : "ليس لديك حساب؟ اختر Sign in من أعلى الصفحة."}
+            {isSignUp
+              ? "لديك حساب؟ اختر Log in من أعلى الصفحة."
+              : "ليس لديك حساب؟ اختر Sign up من أعلى الصفحة."}
           </CardFooter>
         </Card>
-
-        
       </div>
     </section>
   );
 }
 
 export function TopNav({ active, setActive, dark, toggleDark }) {
+  const currentUser = localStorage.getItem("username");
+
   const items = [
     { key: "home", label: "الرئيسية" },
-    { key: "lessons", label: "الدروس"},
-    { key: "dict", label: "القاموس"},
-    { key: "quiz", label: "الاختبار"},
-    { key: "practice", label: "الممارسة"},
+    { key: "lessons", label: "الدروس" },
+    { key: "dict", label: "القاموس" },
+    { key: "quiz", label: "الاختبار" },
+    { key: "practice", label: "الممارسة" },
   ];
-
+  const signOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    alert("تم تسجيل الخروج بنجاح ✅");
+    setActive("signin");
+  };
   return (
     <div className="topnav">
       <div className="container flex items-center justify-between">
         <div className="brand flex items-center gap-2 cursor-pointer" onClick={() => setActive("home")}>
           <div className="logo glow">
-            <img src="/hand.png" alt="logo" width={23}/>
+            <img src="/hand.png" alt="logo" width={23} />
           </div>
           <span className="brand-name gradient-text">إشارة</span>
         </div>
@@ -450,13 +492,23 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
         </nav>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* sign up button*/}
           <Button
             variant={active === "signin" ? "default" : "outline"}
             className="rounded"
             onClick={() => setActive("signin")}
           >
-            Sign in
+            Sign up
           </Button>
+          {/* sign out button*/}
+          <Button
+            variant="outline"
+            className="rounded"
+            onClick={signOut}
+          >
+            Sign out
+          </Button>
+          {/* login button*/}
           <Button
             variant={active === "login" ? "default" : "outline"}
             className="rounded"
@@ -464,25 +516,42 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           >
             Log in
           </Button>
-
+        {/* dark/light mode button*/}
           <Button
             variant="outline"
             className="rounded"
             onClick={toggleDark}
             aria-label="تبديل الوضع الداكن"
             title="تبديل الوضع"
-            style={{ transform: "translate(-90px,0px)" }}
+            style={{ transform: "translate(-90px,0px)", marginRight: 20 }}
           >
-            {dark 
-              ? <img src="/sun.png" alt="" width={17}/> 
-              : <img src="/crescent-moon.png" alt="" width={17}/>}
+            {dark
+              ? <img src="/sun.png" alt="" width={17} />
+              : <img src="/crescent-moon.png" alt="" width={17} />}
           </Button>
+
+          {/* User info */}
+
+          {currentUser && (
+            <div className="flex items-center bg-gray-100 px-3 py-1 rounded-full shadow-sm w-max">
+              <User
+                size={30}
+                color="gray"
+                className="rounded-full bg-white p-1"
+                variant="outline"
+                style={{ marginRight: -80 }}
+              />
+              <span className="text-gray-800 font-medium">{currentUser}</span>
+            </div>
+          )}
+
         </div>
 
       </div>
     </div>
   );
 }
+
 
 export function SignBanner() {
   const PHRASE = "لغة الإشارة جسر للتواصل مع الصم";
@@ -570,42 +639,29 @@ export function Lessons() {
   };
 
   if (!level) {
+  
     return (
-      <section className="section" style={{marginBottom: "265px", textAlign: "center",transform: "translate(0px,100px)"}}>
-        <h2 className="text-xl mb-4" style={{fontSize: "30px"}}>اختر مستواك</h2>
-        <div className="row gap" style={{transform: "translate(-660px,0px)"}}>
-          <Button
-            onClick={() => {
-              setLevel("beginner");
-              setUnlocked({ b1: true });
-              setCurrent("b1");
-            }}
-          >
-            مبتدئ
-          </Button>
-          <Button
-            onClick={() => {
-              setLevel("intermediate");
-              setUnlocked({ i1: true });
-              setCurrent("i1");
-            }}
-          >
-            متوسط
-          </Button>
-          <Button
-            onClick={() => {
-              setLevel("advanced");
-              setUnlocked({ a1: true });
-              setCurrent("a1");
-            }}
-          >
-            محترف
-          </Button>
+      <section
+        className="section"
+        style={{
+          marginBottom: "265px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          transform: "translateY(100px)",
+        }}
+      >
+        <h2 style={{ fontSize: "30px", marginBottom: "20px" }}>اختر مستواك</h2>
+        <div className="row gap" style={{ justifyContent: "center", gap: "20px" }}>
+          <Button onClick={() => setLevel("beginner")}>مبتدئ</Button>
+          <Button onClick={() => setLevel("intermediate")}>متوسط</Button>
+          <Button onClick={() => setLevel("advanced")}>محترف</Button>
         </div>
       </section>
     );
   }
-
   const lessons = LEVELS[level];
   const isLastLesson = current === lessons[lessons.length - 1].id;
 
@@ -620,7 +676,7 @@ export function Lessons() {
                 key={l.id}
                 className={`clickable ${current === l.id ? "ring" : ""} ${
                   locked ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                }`} 
                 onClick={() => {
                   if (!locked) setCurrent(l.id);
                 }}
@@ -814,17 +870,101 @@ export function Dictionary() {
 
 
 export function Quiz() {
+  const [quiz, setQuiz] = useState([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const q = QUIZ[index];
+  const [level, setLevel] = useState(null); // beginner/intermediate/advanced
+
+ 
+  const urlMap = {
+    beginner: "http://localhost:5000/data/quiz/showSigns/1",
+    intermediate: "http://localhost:5000/data/quiz/showSigns/2",
+    advanced: "http://localhost:5000/data/quiz/showSigns/3",
+  };
+
+ 
+  useEffect(() => {
+    if (!level) return;
+
+    let isCancelled = false;
+    const loadQuiz = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(urlMap[level]);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+
+        if (!isCancelled) {
+          const transformed = data.quiz.map(q => {
+            const answerIndex = q.choices.indexOf(q.answer);
+            return {
+              q: q.question,
+              choices: q.choices,
+              answer: Math.max(0, answerIndex),
+            };
+          });
+          setQuiz(transformed);
+          setLoading(false);
+          setIndex(0);
+          setSelected(null);
+          setScore(0);
+          setDone(false);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          console.error('Quiz loading error:', err);
+          setError(err.message);
+          setLoading(false);
+        }
+      }
+    };
+
+    loadQuiz();
+    return () => { isCancelled = true; };
+  }, [level]);
+
+  if (!level) {
+    // LEVEL SELECTION SCREEN
+    return (
+      <section
+        className="section"
+        style={{
+          marginBottom: "265px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          transform: "translateY(100px)",
+        }}
+      >
+        <h2 style={{ fontSize: "30px", marginBottom: "20px" }}>اختر مستواك</h2>
+        <div className="row gap" style={{ justifyContent: "center", gap: "20px" }}>
+          <Button onClick={() => setLevel("beginner")}>مبتدئ</Button>
+          <Button onClick={() => setLevel("intermediate")}>متوسط</Button>
+          <Button onClick={() => setLevel("advanced")}>محترف</Button>
+        </div>
+      </section>
+    );
+  }
+
+  // QUIZ DISPLAY
+  if (loading) return <p>Loading your quiz...</p>;
+  if (error) return <p>Error loading quiz: {error}</p>;
+  if (quiz.length === 0) return <p>No quiz questions available.</p>;
+
+  const q = quiz[index];
+  if (!q) return <p>Quiz data error.</p>;
 
   const submit = () => {
     if (selected === null) return;
     if (selected === q.answer) setScore((s) => s + 1);
-    if (index + 1 < QUIZ.length) {
+    if (index + 1 < quiz.length) {
       setIndex((i) => i + 1);
       setSelected(null);
     } else {
@@ -832,7 +972,12 @@ export function Quiz() {
     }
   };
 
-  const restart = () => { setIndex(0); setSelected(null); setScore(0); setDone(false); };
+  const restart = () => {
+    setIndex(0);
+    setSelected(null);
+    setScore(0);
+    setDone(false);
+  };
 
   return (
     <section className="section" dir="rtl">
@@ -853,20 +998,25 @@ export function Quiz() {
                     className="rounded left hover-move"
                     onClick={() => setSelected(i)}
                   >
-                    {String.fromCharCode(0x0661 + i)}. {c}
+                    <span style={{ marginRight: "5px" }}>{String.fromCharCode(0x0661 + i)}.</span>
+                    <img
+                      src={c}
+                      alt={`choice ${i}`}
+                      style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                    />
                   </Button>
                 ))}
               </div>
               <div className="row gap">
-                <Button className="rounded btn-glow" onClick={submit}>تأكيد الإجابة</Button>
-                
+                <Button className="rounded btn-glow" onClick={submit} disabled={selected === null}>
+                  تأكيد الإجابة
+                </Button>
               </div>
-              
-              <div className="muted small">سؤال {index + 1} من {QUIZ.length}</div>
+              <div className="muted small">سؤال {index + 1} من {quiz.length}</div>
             </div>
           ) : (
             <div className="center col gap">
-              <div className="score pop">نتيجتك: {score} / {QUIZ.length}</div>
+              <div className="score pop">نتيجتك: {score} / {quiz.length}</div>
               <div className="muted">أحسنت! تابع التعلّم عبر الدروس والقاموس.</div>
               <Button className="rounded" onClick={restart}>إعادة الاختبار</Button>
             </div>
@@ -1092,8 +1242,8 @@ export default function SignLanguageSite() {
       {active === "quiz" && <Quiz />}
       {active === "practice" && <Practice />}
       {active === "about" && <About />}
-      {active === "signin" && <AuthPage mode="signin" />}
-      {active === "login" && <AuthPage mode="login" />}
+      {active === "signin" && <AuthPage mode="signin" setActive={setActive} />}
+      {active === "login" && <AuthPage mode="login" setActive={setActive} />}
 
       {showFAB && (
         <button

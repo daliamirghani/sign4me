@@ -27,9 +27,9 @@ const getDataByCategory = async (req, res) => {
 
 const makeQuizWord = async (req, res) =>{
 const level = parseInt(req.params.level);
-const levelData = await signData.find({levelNumber: level})
-const levelIndex = level - 1;
-const shuffledData = helper.shuffle(levelData[levelIndex].signs);
+const levelData = await signData.findOne({levelNumber: level})
+
+const shuffledData = helper.shuffle(levelData.signs);
 const quiz = helper.makeQuiz(shuffledData,1)
 
 if (quiz)
@@ -47,9 +47,8 @@ else {
 
 const makeQuizSign= async (req, res) =>{
 const level = parseInt(req.params.level);
-const levelData = await signData.find({levelNumber: level})
-const levelIndex = level - 1;
-const shuffledData = helper.shuffle(levelData[levelIndex].signs);
+const levelData = await signData.findOne({levelNumber: level})
+const shuffledData = helper.shuffle(levelData.signs);
 const quiz = helper.makeQuiz(shuffledData,1)
 
 if (quiz)
