@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/sign-language-practice-tool/static/css/main.c79af4cc.css",
+    "main.js": "/sign-language-practice-tool/static/js/main.2d742cac.js",
+    "static/js/453.04a7563d.chunk.js": "/sign-language-practice-tool/static/js/453.04a7563d.chunk.js",
+    "index.html": "/sign-language-practice-tool/index.html",
+    "main.c79af4cc.css.map": "/sign-language-practice-tool/static/css/main.c79af4cc.css.map",
+    "main.2d742cac.js.map": "/sign-language-practice-tool/static/js/main.2d742cac.js.map",
+    "453.04a7563d.chunk.js.map": "/sign-language-practice-tool/static/js/453.04a7563d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c79af4cc.css",
+    "static/js/main.2d742cac.js"
+  ]
+}
