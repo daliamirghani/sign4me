@@ -41,79 +41,71 @@ const LEVELS = {
   beginner: [
     {
       id: "b1",
-      title: "مقدمة لغة الإشارة",
+      title: "الحروف الأبجدية",
       level: "مبتدئ",
-      duration: "5 دقائق",
-      video: "https://www.youtube.com/embed/s_BSNVQsqrw",
-      points: ["تعرف على الحروف", "تعلم الأبجدية", "إشارات التحية"],
+      duration: "2 دقائق",
+      video: "https://www.youtube.com/embed/mxHICfk1Hj0?si=nEtz_fnMzbLatTjj",
+      points: ["تعرف على إشارات الحروف الأبجدية"],
     },
     {
       id: "b2",
-      title: "إشارات يومية",
+      title: "عبارات بسيطة ",
       level: "مبتدئ",
-      duration: "7 دقائق",
-      video: "https://www.youtube.com/embed/vNYlOCJQZbo",
-      points: ["إشارات الطعام", "الألوان", "الأرقام"],
-    },
-    {
-      id: "b3",
-      title: "محادثة بسيطة",
-      level: "مبتدئ",
-      duration: "8 دقائق",
-      video: "https://www.youtube.com/embed/2rFh9DgE2tI",
+      duration: "دقيقة ",
+      video: "https://www.youtube.com/embed/PvK8_M7hVJA?si=ugBUcXkLqUBb728F",
       points: ["سؤال وجواب", "مواقف حياتية"],
     },
   ],
   intermediate: [
     {
       id: "i1",
-      title: "جمل أساسية",
+      title: "الأطعمة والمأكولات ",
       level: "متوسط",
-      duration: "6 دقائق",
+      duration: "3 دقائق",
       video: "https://www.youtube.com/embed/vNYlOCJQZbo",
-      points: ["جمل قصيرة", "الضمائر", "الأفعال"],
+      points: [" بعض الأطعمة والمشروبات", "الوجبات اليومية", "الأكل والشرب"],
     },
     {
       id: "i2",
-      title: "التعبير عن الوقت",
+      title: "الأرقام",
       level: "متوسط",
-      duration: "9 دقائق",
-      video: "https://www.youtube.com/embed/vNYlOCJQZbo",
-      points: ["الأيام", "الأشهر", "التوقيت"],
+      duration: "2 دقائق",
+      video: "https://www.youtube.com/embed/k8DXozUtsDI?si=BbLjGgJJLEJyBQMB",
+      points: ["الأرقام"],
     },
     {
       id: "i3",
-      title: "جمل مركبة",
+      title: "أيام الأسبوع ",
       level: "متوسط",
-      duration: "10 دقائق",
-      video: "https://www.youtube.com/embed/vNYlOCJQZbo",
-      points: ["الصفات", "الربط بين الجمل"],
+      duration: "2 دقائق",
+      video: "https://www.youtube.com/embed/fZHh6eFF8Lg?si=0LYrMlI9ObPpy9un",
+      points: ["أيام الأسبوع"],
     },
   ],
   advanced: [
     {
       id: "a1",
-      title: "محادثة كاملة",
+      title: "الأسرة",
       level: "محترف",
-      duration: "10 دقائق",
-      video: "https://www.youtube.com/embed/vNYlOCJQZbo",
-      points: ["حوار عملي", "التعبير المتقدم"],
+      duration: "2 دقائق",
+      video: "https://www.youtube.com/embed/Ra7InNWDRhs?si=LCFtD9dPV0BUGgnf",
+      points: [ "أسامي أعضاء الأسرة "],
     },
     {
       id: "a2",
-      title: "مواقف متقدمة",
+      title: " الإحساس والمشاعر",
       level: "محترف",
-      duration: "12 دقائق",
-      video: "https://www.youtube.com/embed/vNYlOCJQZbo",
-      points: ["التعبير عن الرأي", "النقاشات"],
+      duration: "دقيقة ",
+      video: "https://www.youtube.com/embed/pngr7NcWyOw?si=x-FloGTfYHKqwF23",
+      points: ["التعبير عن الرأي"],
     },
     {
       id: "a3",
-      title: "الطلاقة في لغة الإشارة",
+      title: "الألوان",
       level: "محترف",
-      duration: "15 دقائق",
-      video: "https://www.youtube.com/embed/vNYlOCJQZbo",
-      points: ["التواصل الحر", "تطبيق عملي"],
+      duration: "3 دقائق",
+      video: "https://www.youtube.com/embed/IaJRTJbOpyM?si=tBWkRVFzFk9MGsyF",
+      points: [" الألوان"],
     },
   ],
 };
@@ -639,7 +631,6 @@ export function Lessons() {
   };
 
   if (!level) {
-  
     return (
       <section
         className="section"
@@ -655,32 +646,43 @@ export function Lessons() {
       >
         <h2 style={{ fontSize: "30px", marginBottom: "20px" }}>اختر مستواك</h2>
         <div className="row gap" style={{ justifyContent: "center", gap: "20px" }}>
-          <Button onClick={() => setLevel("beginner")}>مبتدئ</Button>
-          <Button onClick={() => setLevel("intermediate")}>متوسط</Button>
-          <Button onClick={() => setLevel("advanced")}>محترف</Button>
+          <Button onClick={() => {
+            setLevel("beginner");
+            setUnlocked({ b1: true });
+            setCurrent("b1");
+          }}>مبتدئ</Button>
+          <Button onClick={() => {
+            setLevel("intermediate");
+            setUnlocked({ i1: true });
+            setCurrent("i1");
+          }}>متوسط</Button>
+          <Button onClick={() => {
+            setLevel("advanced");
+            setUnlocked({ a1: true });
+            setCurrent("a1");
+          }}>محترف</Button>
         </div>
       </section>
     );
   }
+
   const lessons = LEVELS[level];
   const isLastLesson = current === lessons[lessons.length - 1].id;
 
   return (
     <section className="section" dir="rtl">
-      <div className="container grid-2 gap-6"style={{gap: "20px"}}>
-        <div className="flex flex-col gap-4" style={{gap: "30px"}}>
+      <div className="container grid-2 gap-6" style={{ gap: "20px" }}>
+        <div className="flex flex-col gap-4" style={{ gap: "30px" }}>
           {lessons.map((l) => {
             const locked = !unlocked[l.id];
             return (
               <Card
                 key={l.id}
-                className={`clickable ${current === l.id ? "ring" : ""} ${
-                  locked ? "opacity-50 cursor-not-allowed" : ""
-                }`} 
+                className={`clickable ${current === l.id ? "ring" : ""} ${locked ? "opacity-50 cursor-not-allowed" : ""}`}
                 onClick={() => {
                   if (!locked) setCurrent(l.id);
                 }}
-                style={{marginBottom: "20px"}}
+                style={{ marginBottom: "20px" }}
               >
                 <CardHeader>
                   <CardTitle className="row gap">
@@ -717,11 +719,11 @@ export function Lessons() {
                     <Button onClick={finishLesson}>إنهاء الدرس</Button>
                   ) : level !== "advanced" ? (
                     <Button onClick={goToNextLevel}>
-                       الانتقال إلى المستوى التالي
+                      الانتقال إلى المستوى التالي
                     </Button>
                   ) : (
                     <span className="font-bold text-green-600">
-                       مبروك! أنهيت جميع المستويات
+                      مبروك! أنهيت جميع المستويات
                     </span>
                   )}
                 </div>
@@ -733,6 +735,7 @@ export function Lessons() {
     </section>
   );
 }
+
 
 
 export function Dictionary() {
