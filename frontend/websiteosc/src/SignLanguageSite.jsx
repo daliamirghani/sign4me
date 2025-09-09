@@ -676,7 +676,7 @@ export function Lessons() {
                 key={l.id}
                 className={`clickable ${current === l.id ? "ring" : ""} ${
                   locked ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                }`} 
                 onClick={() => {
                   if (!locked) setCurrent(l.id);
                 }}
@@ -839,9 +839,9 @@ export function Quiz() {
 
  
   const urlMap = {
-    beginner: "http://localhost:5000/quiz/showSigns/1",
-    intermediate: "http://localhost:5000/quiz/showSigns/2",
-    advanced: "http://localhost:5000/quiz/showSigns/3",
+    beginner: "http://localhost:5000/data/quiz/showSigns/1",
+    intermediate: "http://localhost:5000/data/quiz/showSigns/2",
+    advanced: "http://localhost:5000/data/quiz/showSigns/3",
   };
 
  

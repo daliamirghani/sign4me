@@ -15,16 +15,13 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(cookieParser());
 ;
 
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true
-}));
-// DB
+
+
 connectDB();
 
-//Routers
-app.use("/api/data", dataRouter);
-app.use("/api/auth", authRouter);
+
+app.use("/data", dataRouter);
+app.use("/auth", authRouter);
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
