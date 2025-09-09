@@ -526,7 +526,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             onClick={toggleDark}
             aria-label="تبديل الوضع الداكن"
             title="تبديل الوضع"
-            style={{ transform: "translate(-90px,0px)", marginRight: 20 }}
+            style={{ transform: "translate(-90px,0px)", marginRight: 10 }}
           >
             {dark
               ? <img src="/sun.png" alt="" width={17} />
