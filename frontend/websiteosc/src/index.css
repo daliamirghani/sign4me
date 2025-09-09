@@ -1,5 +1,5 @@
 
-@tailwind base;
+
 
 
 body {
@@ -17,7 +17,3 @@ code {
 }
 
 
-@tailwind components;
-
-
-@tailwind utilities;

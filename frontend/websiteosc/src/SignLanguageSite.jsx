@@ -478,7 +478,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
         {/* Brand */}
         <div className="brand flex items-center gap-2 cursor-pointer" onClick={() => setActive("home")}>
           <div className="logo glow">
-            <img src="/hand.png" alt="logo" width={23} />
+            <img src="/hand.png"alt="logo" width={23} />
           </div>
           <span className="brand-name gradient-text">قولها بإيدك</span>
         </div>
