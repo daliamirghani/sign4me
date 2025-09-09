@@ -37,7 +37,7 @@ const signUp = async(req,res)=>  {
 
 
 const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, "SECRET", {
     expiresIn: "3d",  
   });
 };

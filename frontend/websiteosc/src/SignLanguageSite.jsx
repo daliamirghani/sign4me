@@ -475,7 +475,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           <div className="logo glow">
             <img src="/hand.png" alt="logo" width={23} />
           </div>
-          <span className="brand-name gradient-text">إشارة</span>
+          <span className="brand-name gradient-text">قولها بإيدك</span>
         </div>
 
         <nav className="nav flex gap-2">
@@ -749,7 +749,7 @@ export function Dictionary() {
 
   useEffect(() => {
   setLoading(true);
-  fetch("http://localhost:5000/api/data/level/1")
+  fetch("http://localhost:5000/data/level/1")
     .then((res) => res.json())
     .then((json) => {
       setSigns(json[0]?.signs || []);
