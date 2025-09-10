@@ -494,7 +494,7 @@ body{
   align-items: center;
   gap: 0.75rem; 
   min-width: 0;
-  width: ;
+  width: 100%;
 }
 .user-info {
   display: flex;
