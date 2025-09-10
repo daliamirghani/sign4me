@@ -1,6 +1,6 @@
 <div dir="ltr">
 
-# علمني بإيدك 👆  — sign4me 
+# قولها بإيدك 👆  — sign4me 
 A web app designed to help users learn and practice Arabic Sign Language through interactive lessons and exercises.  
 Our main goal is to serve the deaf community and help us build better connections with them. <br> <br>
 <b> You can access the live site [here.](https://sign4me.netlify.app/) <br> <br> </b>
