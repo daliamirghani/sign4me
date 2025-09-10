@@ -1288,9 +1288,9 @@ export default function SignLanguageSite() {
           </nav>
 
           <div className="footer-social" style={{ display: "flex", gap: "20px" }}>
-            <a href="#"><Facebook size={23} style={{ color: "black" }} /></a>
-            <a href="#"><Twitter size={23} style={{ color: "black" }} /></a>
-            <a href="#"><Youtube size={23} style={{ color: "black" }} /></a>
+            <a href="#"><Facebook size={27} style={{ color: "grey" }} /></a>
+            <a href="#"><Twitter size={27} style={{ color: "grey" }} /></a>
+            <a href="#"><Youtube size={27} style={{ color: "grey" }} /></a>
           </div>
         </div>
 
