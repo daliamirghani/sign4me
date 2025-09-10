@@ -12,7 +12,7 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(cors({
-  origin: "https://your-netlify-app.netlify.app",
+  origin: "https://sign4me.netlify.app/",
   credentials: true
 }));
  
