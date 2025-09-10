@@ -466,17 +466,17 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             className="rounded"
             onClick={() => setActive("signin")}
           >
-            Sign up
+            SignUp
           </Button>
           <Button variant="outline" className="rounded" onClick={signOut}>
-            Sign out
+            SignOut
           </Button>
           <Button
             variant={active === "login" ? "default" : "outline"}
             className="rounded"
             onClick={() => setActive("login")}
           >
-            Log in
+            Login
           </Button>
           <Button
             variant="outline"

@@ -494,6 +494,7 @@ body{
   align-items: center;
   gap: 0.75rem; 
   min-width: 0;
+  width: 150%;
 }
 .user-info {
   display: flex;
@@ -512,7 +513,7 @@ body{
   }
   .topnav .actions button
   ,.topnav .actions .button{
-   width: 100% !important; /* force full width */
+   width: 150% !important; /* force full width */
     max-width: 100%;
   }
 
