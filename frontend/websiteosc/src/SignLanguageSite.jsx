@@ -458,7 +458,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
     <div className="topnav navbar fixed-top">
       <div className="container flex items-center justify-between">
 
-      
+
 
         <div className="actions flex items-center gap-2 flex-nowrap w-full">
           <Button
@@ -485,23 +485,23 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             aria-label="تبديل الوضع الداكن"
             title="تبديل الوضع"
           >
-           {dark ? <Sun size={20} style={{ color: "#FFC300" }} /> : <Moon size={20} /> }
+            {dark ? <Sun size={20} style={{ color: "#FFC300" }} /> : <Moon size={20} />}
 
           </Button>
 
-  {currentUser && (
-    <div className="user-info flex items-center bg-gray-100 px-2 py-1 rounded-full shadow-sm text-xs ml-2 flex-shrink-0">
-      <User
-        size={18}
-        color="gray"
-        className="rounded-full bg-white p-1"
-        variant="outline"
-      />
-      <br />
-      <span className="text-gray-800 font-medium ml-1">{currentUser}</span>
-    </div>
-  )}
-</div>
+          {currentUser && (
+            <div className="user-info flex flex-col items-center bg-gray-100 px-3 py-2 rounded-lg shadow-sm text-xs ml-2 flex-shrink-0">
+              <User
+                size={28}
+                color="gray"
+                className="rounded-full bg-white p-1"
+                variant="outline"
+              />
+              <span className="text-gray-800 font-medium mt-1">{currentUser}</span>
+            </div>
+          )}
+
+        </div>
 
 
         {/* Hamburger */}
@@ -1008,10 +1008,10 @@ export function Practice() {
   const [copied, setCopied] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const copy = async () => {
-    try { 
-      await navigator.clipboard?.writeText(note); 
-      setCopied(true); 
-      setTimeout(() => setCopied(false), 1200); 
+    try {
+      await navigator.clipboard?.writeText(note);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
     } catch (err) {
       console.error("Copy failed:", err);
     }
