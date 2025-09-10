@@ -463,7 +463,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
     { key: "lessons", label: "الدروس" },
     { key: "dict", label: "القاموس" },
     { key: "quiz", label: "الاختبار" },
-    { key: "practice", label: "الممارسة" },
+    // { key: "practice", label: "الممارسة" },
   ];
   const signOut = () => {
     localStorage.removeItem("token");
@@ -1258,7 +1258,7 @@ export default function SignLanguageSite() {
       {active === "lessons" && <Lessons />}
       {active === "dict" && <Dictionary />}
       {active === "quiz" && <Quiz />}
-      {active === "practice" && <Practice />}
+  {/* {active === "practice" && <Practice />}*/}
       {active === "about" && <About />}
       {active === "signin" && <AuthPage mode="signin" setActive={setActive} />}
       {active === "login" && <AuthPage mode="login" setActive={setActive} />}
