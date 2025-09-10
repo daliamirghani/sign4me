@@ -6,10 +6,7 @@ import {
 } from "lucide-react";
 import { FaHandPeace, FaHandRock, FaHandPaper } from "react-icons/fa";
 
-
-
 import "./SignLanguageSite.css";
-
 
 const LESSONS = [
   {
@@ -146,7 +143,6 @@ const QUIZ = [
 
 const topics = Array.from(new Set(DICT.map((d) => d.topic)));
 
-
 export function Badge({ children, tone = "default", className = "" }) {
   return <span className={`badge badge-${tone} ${className}`}>{children}</span>;
 }
@@ -191,7 +187,6 @@ export function CardFooter({ children, className = "" }) {
   return <div className={`card-footer ${className}`}>{children}</div>;
 }
 
-
 export function useRevealOnScroll(watch) {
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -225,7 +220,7 @@ export function useRevealOnScroll(watch) {
     mo.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      io?.disconnect();
+      if (io) io.disconnect();
       mo.disconnect();
     };
   }, [watch]);
@@ -246,7 +241,6 @@ export function useScrollProgress() {
   }, []);
   return Math.min(100, Math.max(0, progress));
 }
-
 
 export function VideoFrame({ src, title }) {
   const [loaded, setLoaded] = useState(false);
@@ -291,7 +285,6 @@ export function VideoFrame({ src, title }) {
   );
 }
 
-
 export function AuthPage({ mode, setActive }) {
   const isSignUp = mode === "signin";
   const [email, setEmail] = useState("");
@@ -301,7 +294,6 @@ export function AuthPage({ mode, setActive }) {
   const [agree, setAgree] = useState(false);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
 
   const validate = () => {
     const e = {};
@@ -312,7 +304,6 @@ export function AuthPage({ mode, setActive }) {
     setErrors(e);
     return Object.keys(e).length === 0;
   };
-
 
   const registration = async (ev) => {
     ev.preventDefault();
@@ -329,8 +320,6 @@ export function AuthPage({ mode, setActive }) {
         setMessage("تم إنشاء الحساب بنجاح");
         console.log("Signup response:", res.data);
         setActive("login");
-
-
       } else {
         // sign in
         const res = await api.post("/signin", {
@@ -340,12 +329,9 @@ export function AuthPage({ mode, setActive }) {
         setMessage("تم تسجيل الدخول بنجاح");
         console.log("Signin response:", res.data);
 
-
-        setCurrentUser(res.data.username);
         localStorage.setItem("username", res.data.data.username);
         setActive("home");
       }
-
     } catch (err) {
       console.error("Error:", err.response?.data || err.message);
       setMessage(" حصل خطأ: " + (err.response?.data?.msg || "Server error"));
@@ -353,7 +339,6 @@ export function AuthPage({ mode, setActive }) {
   };
 
   return (
-
     <section className="section " dir="rtl" >
       <div className="container ">
         <div className="row justify-content-center" style={{ width: "74%" }}>
@@ -449,8 +434,6 @@ export function AuthPage({ mode, setActive }) {
         </div>
       </div>
     </section>
-
-
   );
 }
 
@@ -483,8 +466,6 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           <span className="brand-name gradient-text">قولها بإيدك</span>
         </div>
 
-
-
         <div className="actions flex items-center gap-3">
           <Button
             variant={active === "signin" ? "default" : "outline"}
@@ -511,7 +492,6 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             title="تبديل الوضع"
           >
            {dark ? <Sun size={20} style={{ color: "#FFC300" }} /> : <Moon size={20} /> }
-
           </Button>
 
           {currentUser && (
@@ -536,23 +516,21 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
 
         {/* Nav links */}
         <nav className={`nav flex gap-2 ${menuOpen ? "active" : ""}`}>
-          {items.map(({ key, label, icon }) => (
+          {items.map(({ key, label }) => (
             <Button
               key={key}
               variant={active === key ? "default" : "ghost"}
               className={`rounded nav-link ${active === key ? "active" : ""}`}
               onClick={() => setActive(key)}
             >
-              <span className="nav-icon">{icon}</span> {label}
+              {label}
             </Button>
           ))}
         </nav>
       </div>
     </div>
-
   );
 }
-
 
 export function SignBanner() {
   const PHRASE = "لغة الإشارة جسر للتواصل مع الصم";
@@ -567,7 +545,6 @@ export function SignBanner() {
             {word}
           </span>
         ))}
-
       </div>
       <div className="sign-hands flex gap-2">
         <FaHandPeace size={17} />
@@ -606,7 +583,6 @@ export function Hero({ goLessons }) {
   );
 }
 
-
 export function Lessons() {
   const [level, setLevel] = useState(null);
   const [unlocked, setUnlocked] = useState({});
@@ -640,7 +616,6 @@ export function Lessons() {
   };
 
   if (!level) {
-
     return (
       <section
         className="section"
@@ -745,6 +720,7 @@ export function Lessons() {
     </section>
   );
 }
+
 export function Dictionary() {
   const [q, setQ] = useState("");
   const [signs, setSigns] = useState([]);
@@ -759,7 +735,7 @@ export function Dictionary() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:5000/data/level/1")
+    fetch("https://sign-language-practice-tool.onrender.com/data/level/1")
       .then((res) => res.json())
       .then((json) => {
         setSigns(json[0]?.signs || []);
@@ -770,7 +746,6 @@ export function Dictionary() {
         setLoading(false);
       });
   }, []);
-
 
   const data = useMemo(() => {
     const t = tag === "الكل" ? DICT : DICT.filter((d) => d.topic === tag);
@@ -788,7 +763,6 @@ export function Dictionary() {
 
       return next;
     });
-
   };
 
   return (
@@ -826,15 +800,13 @@ export function Dictionary() {
                 <CardHeader className="pb-0">
                   <div className="row between">
                     <CardTitle className="text-lg">{item.arabic}</CardTitle>
-                    <span onClick={() => toggleFav(item.id, item.word)} style={{ cursor: "pointer" }}>
+                    <span onClick={() => toggleFav(item.id, item.arabic)} style={{ cursor: "pointer" }}>
                       <Star
                         size={18}
                         fill={favs.includes(item.id) ? "#FFC300" : "none"}
                         stroke="#FFC300"
                       />
                     </span>
-
-
                   </div>
                   <CardDescription>{item.translit} • {item.topic}</CardDescription>
                 </CardHeader>
@@ -842,34 +814,33 @@ export function Dictionary() {
                   <VideoFrame src={item.video} title={item.arabic} />
                 </CardContent>
               </Card>
-
-
             ))}
           </div>
           <section className="section" style={{ marginTop: "40px" }}>
             <h2 className="text-xl font-bold mb-4">الإشارات بالصور</h2>
-            <div className="cards-grid">
-              {signs.map((item, i) => (
-                <Card key={i} className="rounded column center" data-reveal>
-                  <CardHeader className="pb-0 center">
-                    <img
-                      src={item.signImage}     // الصورة من الـ API
-                      alt={item.answer}        // النص البديل هو الترجمة
-                      className="rounded"
-                      style={{ width: "100%", height: "180px", objectFit: "cover" }}
-                    />
-                  </CardHeader>
-                  <CardContent className="center column">
-                    <CardTitle className="text-lg">{item.answer}</CardTitle> {/* الترجمة تحت الصورة */}
-                    <CardDescription>{item.category}</CardDescription>       {/* هنا ممكن تعرض الـ category */}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {loading ? (
+              <div className="center muted py-10">جاري تحميل الصور...</div>
+            ) : (
+              <div className="cards-grid">
+                {signs.map((item, i) => (
+                  <Card key={i} className="rounded column center" data-reveal>
+                    <CardHeader className="pb-0 center">
+                      <img
+                        src={item.signImage}
+                        alt={item.answer}
+                        className="rounded"
+                        style={{ width: "100%", height: "180px", objectFit: "cover" }}
+                      />
+                    </CardHeader>
+                    <CardContent className="center column">
+                      <CardTitle className="text-lg">{item.answer}</CardTitle>
+                      <CardDescription>{item.category}</CardDescription>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </section>
-
-
-
 
           {data.length === 0 && <div className="center muted py-10">لا توجد نتائج مطابقة لبحثك.</div>}
         </CardContent>
@@ -880,7 +851,6 @@ export function Dictionary() {
   );
 }
 
-
 export function Quiz() {
   const [quiz, setQuiz] = useState([]);
   const [index, setIndex] = useState(0);
@@ -889,16 +859,13 @@ export function Quiz() {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const [level, setLevel] = useState(null); // beginner/intermediate/advanced
-
+  const [level, setLevel] = useState(null);
 
   const urlMap = {
     beginner: "http://localhost:5000/data/quiz/showSigns/1",
     intermediate: "http://localhost:5000/data/quiz/showSigns/2",
     advanced: "http://localhost:5000/data/quiz/showSigns/3",
   };
-
 
   useEffect(() => {
     if (!level) return;
@@ -941,7 +908,6 @@ export function Quiz() {
   }, [level]);
 
   if (!level) {
-    // LEVEL SELECTION SCREEN
     return (
       <section
         className="section"
@@ -965,7 +931,6 @@ export function Quiz() {
     );
   }
 
-  // QUIZ DISPLAY
   if (loading) return <p>Loading your quiz...</p>;
   if (error) return <p>Error loading quiz: {error}</p>;
   if (quiz.length === 0) return <p>No quiz questions available.</p>;
@@ -1039,24 +1004,28 @@ export function Quiz() {
   );
 }
 
-
 export function Practice() {
   const [note, setNote] = useState("");
   const [accepted, setAccepted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const copy = async () => {
-    try { await navigator.clipboard?.writeText(note); setCopied(true); setTimeout(() => setCopied(false), 1200); } catch { }
+    try { 
+      await navigator.clipboard?.writeText(note); 
+      setCopied(true); 
+      setTimeout(() => setCopied(false), 1200); 
+    } catch (err) {
+      console.error("Copy failed:", err);
+    }
   };
   if (showCamera) {
-    return <CameraPractice onBack={() => setShowCamera(false)} />; // لو ضغط الزرار نروح للكاميرا
+    return <CameraPractice onBack={() => setShowCamera(false)} />;
   }
   return (
     <section className="section" dir="rtl">
       <div className="container grid-2-60">
         <Card className="rounded" data-reveal>
           <CardHeader>
-
             <CardDescription>سجل ملاحظاتك</CardDescription>
           </CardHeader>
           <CardContent className="col gap">
@@ -1125,7 +1094,6 @@ export function CameraPractice({ onBack }) {
     }
   };
 
-  // إرسال Frame للباك إند كل 3 ثواني
   useEffect(() => {
     if (!streaming) return;
 
@@ -1157,8 +1125,6 @@ export function CameraPractice({ onBack }) {
   return (
     <section className="section" dir="rtl">
       <div className="container grid-2-60">
-
-        {/* الكاميرا */}
         <Card className="rounded" data-reveal>
           <CardHeader>
             <CardTitle className="row gap">تدريب بالكاميرا</CardTitle>
@@ -1178,7 +1144,6 @@ export function CameraPractice({ onBack }) {
           </CardContent>
         </Card>
 
-        {/* النتيجة */}
         <Card className="rounded" data-reveal>
           <CardHeader>
             <CardTitle>نتيجة الترجمة</CardTitle>
@@ -1198,6 +1163,7 @@ export function CameraPractice({ onBack }) {
     </section>
   );
 }
+
 export function About() {
   return (
     <section className="section" dir="rtl">
@@ -1218,7 +1184,6 @@ export function About() {
     </section>
   );
 }
-
 
 export function Home({ goLessons }) {
   return (
@@ -1258,7 +1223,7 @@ export default function SignLanguageSite() {
       {active === "lessons" && <Lessons />}
       {active === "dict" && <Dictionary />}
       {active === "quiz" && <Quiz />}
-  {/* {active === "practice" && <Practice />}*/}
+      {active === "practice" && <Practice />}
       {active === "about" && <About />}
       {active === "signin" && <AuthPage mode="signin" setActive={setActive} />}
       {active === "login" && <AuthPage mode="login" setActive={setActive} />}
