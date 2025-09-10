@@ -492,7 +492,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           {currentUser && (
             <div className="user-info bg-gray-100 flex-col px-3 py-2 rounded-lg shadow-sm text-xs ml-2 flex-shrink-0">
               <User
-                size={28}
+                size={22}
                 color="gray"
                 className="rounded-full bg-white p-1 flex-col"
                 variant="outline"
