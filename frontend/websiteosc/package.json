@@ -1,7 +1,7 @@
 {
   "name": "websiteosc",
   "version": "0.1.0",
-  "homepage": "https://YOMNA-MAHSOOB.github.io/sign-language-practice-tool",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.13",
