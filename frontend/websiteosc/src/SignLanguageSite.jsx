@@ -466,7 +466,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
           <span className="brand-name gradient-text">قولها بإيدك</span>
         </div>
 
-        <div className="actions flex items-center gap-3">
+        <div className="actions flex items-center gap-2 flex-nowrap w-full">
           <Button
             variant={active === "signin" ? "default" : "outline"}
             className="rounded"
@@ -492,20 +492,22 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             title="تبديل الوضع"
           >
            {dark ? <Sun size={20} style={{ color: "#FFC300" }} /> : <Moon size={20} /> }
+
           </Button>
 
-          {currentUser && (
-            <div className="user-info flex items-center bg-gray-100 px-3 py-1 rounded-full shadow-sm">
-              <User
-                size={30}
-                color="gray"
-                className="rounded-full bg-white p-1"
-                variant="outline"
-              />
-              <span className="text-gray-800 font-medium ml-2">{currentUser}</span>
-            </div>
-          )}
-        </div>
+  {currentUser && (
+    <div className="user-info flex items-center bg-gray-100 px-2 py-1 rounded-full shadow-sm text-xs ml-2 flex-shrink-0">
+      <User
+        size={18}
+        color="gray"
+        className="rounded-full bg-white p-1"
+        variant="outline"
+      />
+      <span className="text-gray-800 font-medium ml-1">{currentUser}</span>
+    </div>
+  )}
+</div>
+
 
         {/* Hamburger */}
         <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>

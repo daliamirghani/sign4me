@@ -492,11 +492,23 @@ body{
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem; /* نفس gap-3 */
+  gap: 0.75rem; 
   min-width: 0;
 }
 .user-info {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* أو margin-left */
+  gap: 0.5rem; 
+}
+
+
+@media (max-width: 600px) {
+  .topnav .actions {
+    flex-direction: row;   
+    gap: 4px;                 
+    width: 45%;    
+    margin-right: -60px;        
+  }
+
+
 }
