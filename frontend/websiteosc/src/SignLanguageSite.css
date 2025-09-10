@@ -454,7 +454,7 @@ body{
   .topnav .nav {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     background: var(--surface);
     flex-direction: column;
     gap: 0;
@@ -470,6 +470,7 @@ body{
   .topnav .nav.active {
     max-height: 500px; /* يكفي جميع الروابط */
     opacity: 1;
+    float: left;
   }
 
   .topnav .nav .nav-link {
