@@ -510,7 +510,8 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             aria-label="تبديل الوضع الداكن"
             title="تبديل الوضع"
           >
-            {dark ? <Moon size={20} /> : <Sun size={20} style={{ color: "#FFC300" }} />}
+           {dark ? <Sun size={20} style={{ color: "#FFC300" }} /> : <Moon size={20} /> }
+
           </Button>
 
           {currentUser && (
