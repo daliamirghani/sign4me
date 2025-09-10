@@ -458,68 +458,61 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
     <div className="topnav navbar fixed-top">
       <div className="container flex items-center justify-between">
 
-        {/* Brand */}
-        <div className="brand flex items-center gap-2 cursor-pointer" onClick={() => setActive("home")}>
-          <div className="logo glow">
-            <Hand size={23} />
-          </div>
-          <span className="brand-name gradient-text">قولها بإيدك</span>
-        </div>
+        
+        
 
-        {/* Desktop Actions */}
-        <div className="hidden actions md:flex items-center gap-4 flex-nowrap ">
+        <div className="actions flex items-center gap-2 flex-nowrap w-full">
           <Button
             variant={active === "signin" ? "default" : "outline"}
-            className="rounded " 
+            className="rounded"
             onClick={() => setActive("signin")}
           >
             Sign up
           </Button>
-
+          <Button variant="outline" className="rounded" onClick={signOut}>
+            Sign out
+          </Button>
           <Button
             variant={active === "login" ? "default" : "outline"}
-            className="rounded " 
+            className="rounded"
             onClick={() => setActive("login")}
           >
             Log in
           </Button>
-
-          {currentUser && (
-            <Button variant="outline" className="rounded mr-2"  onClick={signOut}>
-              Sign out
-            </Button>
-          )}
-
           <Button
             variant="outline"
-            className="rounded " 
+            className="rounded"
             onClick={toggleDark}
+            aria-label="تبديل الوضع الداكن"
+            title="تبديل الوضع"
           >
-            {dark ? <Sun size={20} style={{ color: "#FFC300" }} /> : <Moon size={20} />}
+           {dark ? <Sun size={20} style={{ color: "#FFC300" }} /> : <Moon size={20} /> }
+
           </Button>
 
-          {currentUser && (
-            <div className="user-info flex items-center bg-gray-100 px-2 py-1 rounded-full shadow-sm text-xs ml-2">
-              <User
-                size={18}
-                color="gray"
-                className="rounded-full bg-white p-1"
-                variant="outline"
-              />
-              <span className="text-gray-800 font-medium ml-1">{currentUser}</span>
-            </div>
-          )}
-        </div>
+  {currentUser && (
+    <div className="user-info flex items-center bg-gray-100 px-2 py-1 rounded-full shadow-sm text-xs ml-2 flex-shrink-0">
+      <User
+        size={18}
+        color="gray"
+        className="rounded-full bg-white p-1"
+        variant="outline"
+      />
+      <span className="text-gray-800 font-medium ml-1">{currentUser}</span>
+    </div>
+  )}
+</div>
+
 
         {/* Hamburger */}
-        <div className="hamburger md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>
           <span></span>
           <span></span>
         </div>
 
         {/* Nav links */}
-        <nav className={`nav flex flex-col md:flex-row gap-2 ${menuOpen ? "active" : ""}`}>
+        <nav className={`nav flex gap-2 ${menuOpen ? "active" : ""}`}>
           {items.map(({ key, label }) => (
             <Button
               key={key}
@@ -530,17 +523,6 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
               {label}
             </Button>
           ))}
-
-          {/* Sign out for mobile */}
-          {currentUser && (
-            <Button
-              className="rounded md:hidden"
-              variant="ghost"
-              onClick={signOut}
-            >
-              Sign out
-            </Button>
-          )}
         </nav>
       </div>
     </div>
@@ -548,20 +530,20 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
 }
 
 export function SignBanner() {
-  const PHRASE = "لغة الإشارة جسر للتواصل مع الصم";
   return (
-    <div className="sign-banner" data-reveal aria-label={PHRASE}>
+    <div className="sign-banner flex items-center gap-2" data-reveal>
+      {/* Logo */}
       <div className="logo glow">
         <Hand size={23} />
       </div>
-      <div className="sign-phrase">
-        {PHRASE.split(" ").map((word, i) => (
-          <span key={i} style={{ animationDelay: `${i * 0.3}s`, display: "inline-block", marginRight: "0.25em" }}>
-            {word}
-          </span>
-        ))}
-      </div>
-      <div className="sign-hands flex gap-2">
+
+      {/* Text */}
+      <span className="brand-name gradient-text text-lg font-bold">
+        قولها بإيدك
+      </span>
+
+      {/* Hands Icons */}
+      <div className="sign-hands flex gap-2 ml-4">
         <FaHandPeace size={17} />
         <FaHandRock size={17} />
         <FaHandPaper size={17} />
@@ -569,6 +551,7 @@ export function SignBanner() {
     </div>
   );
 }
+
 
 export function Hero({ goLessons }) {
   return (
