@@ -497,6 +497,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
         className="rounded-full bg-white p-1"
         variant="outline"
       />
+      <br />
       <span className="text-gray-800 font-medium ml-1">{currentUser}</span>
     </div>
   )}
