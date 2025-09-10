@@ -458,8 +458,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
     <div className="topnav navbar fixed-top">
       <div className="container flex items-center justify-between">
 
-        
-        
+      
 
         <div className="actions flex items-center gap-2 flex-nowrap w-full">
           <Button
