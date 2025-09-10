@@ -514,7 +514,7 @@ body{
   .topnav .actions button
   ,.topnav .actions .button{
    width: 10% !important; /* force full width */
-    max-width: 100%;
+    max-width: 60%;
   }
 
 
