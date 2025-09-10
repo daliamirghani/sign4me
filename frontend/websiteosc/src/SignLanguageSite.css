@@ -506,8 +506,8 @@ body{
   .topnav .actions {
     flex-direction: row;   
     gap: 4px;                 
-    width: 47%;    
-    margin-right: -40px;        
+    width: 52%;    
+      
   }
 
 
