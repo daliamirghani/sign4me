@@ -507,13 +507,13 @@ body{
   .topnav .actions {
     flex-direction: row;   
     gap: 4px;                 
-    width: 1%;   
+    width: 100%;   
     margin-right: 30px; 
       
   }
   .topnav .actions button
   ,.topnav .actions .button{
-   width: 145% !important; /* force full width */
+   width: 100% !important; /* force full width */
     max-width: 100%;
   }
 
