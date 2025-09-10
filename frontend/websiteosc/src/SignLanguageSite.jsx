@@ -1,7 +1,11 @@
 import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import api from "./auth.api";
-import { User } from "lucide-react";
+import {
+  User, Hand, Eye, EyeOff, Sun, Moon, Search, Lock, Star, Facebook, Twitter, Youtube
+} from "lucide-react";
+import { FaHandPeace, FaHandRock, FaHandPaper } from "react-icons/fa";
+
 
 
 import "./SignLanguageSite.css";
@@ -405,11 +409,7 @@ export function AuthPage({ mode, setActive }) {
                           variant="outline"
                           className="rounded btn-icon"
                           onClick={() => setShowPass((s) => !s)} >
-                          {showPass ? (
-                            <img src="/eye1.png" alt="logo" width={20} />
-                          ) : (
-                            <img src="/eye.png" alt="logo" width={18} />
-                          )}
+                          {showPass ? <Eye size={18} /> : <EyeOff size={18} />}
                         </Button>
                       </div>
                       {errors.password && <div className="error">{errors.password}</div>}
@@ -478,7 +478,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
         {/* Brand */}
         <div className="brand flex items-center gap-2 cursor-pointer" onClick={() => setActive("home")}>
           <div className="logo glow">
-            <img src="/hand.png"alt="logo" width={23} />
+            <Hand size={23} />
           </div>
           <span className="brand-name gradient-text">قولها بإيدك</span>
         </div>
@@ -494,8 +494,8 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             Sign up
           </Button>
           <Button variant="outline" className="rounded" onClick={signOut}>
-              Sign out
-            </Button>
+            Sign out
+          </Button>
           <Button
             variant={active === "login" ? "default" : "outline"}
             className="rounded"
@@ -510,7 +510,7 @@ export function TopNav({ active, setActive, dark, toggleDark }) {
             aria-label="تبديل الوضع الداكن"
             title="تبديل الوضع"
           >
-            {dark ? <img src="/sun.png" alt="" width={17} /> : <img src="/crescent-moon.png" alt="" width={17} />}
+            {dark ? <Moon size={20} /> : <Sun size={20} style={{ color: "#FFC300" }} />}
           </Button>
 
           {currentUser && (
@@ -558,7 +558,7 @@ export function SignBanner() {
   return (
     <div className="sign-banner" data-reveal aria-label={PHRASE}>
       <div className="logo glow">
-        <img src="/hand.png" alt="logo" width={23} />
+        <Hand size={23} />
       </div>
       <div className="sign-phrase">
         {PHRASE.split(" ").map((word, i) => (
@@ -568,10 +568,10 @@ export function SignBanner() {
         ))}
 
       </div>
-      <div className="sign-hands">
-        <span className="hand"><img src="/ok.png" alt="logo" width={23} /></span>
-        <span className="hand"><img src="/letter-i.png" alt="logo" width={23} /></span>
-        <span className="hand"><img src="/letter-v.png" alt="logo" width={23} /></span>
+      <div className="sign-hands flex gap-2">
+        <FaHandPeace size={17} />
+        <FaHandRock size={17} />
+        <FaHandPaper size={17} />
       </div>
     </div>
   );
@@ -695,7 +695,7 @@ export function Lessons() {
               >
                 <CardHeader>
                   <CardTitle className="row gap">
-                    <span>{locked ? <img src="/lock-padlock-symbol-for-security-interface.png" alt="logo" width={23} /> : <img src="/eye.png" alt="logo" width={23} />}</span>
+                    <span>{locked ? <Lock width={23} /> : <Eye width={23} />}</span>
                     <span>{l.title}</span>
                   </CardTitle>
                   <CardDescription>
@@ -744,9 +744,6 @@ export function Lessons() {
     </section>
   );
 }
-
-
-
 export function Dictionary() {
   const [q, setQ] = useState("");
   const [signs, setSigns] = useState([]);
@@ -785,9 +782,12 @@ export function Dictionary() {
     setFavs((prev) => {
       const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
       setToast(next.includes(id) ? `تمت إضافة "${word}" إلى المفضلة` : `تمت إزالة "${word}" من المفضلة`);
+
       setTimeout(() => setToast(""), 1500);
+
       return next;
     });
+
   };
 
   return (
@@ -800,7 +800,7 @@ export function Dictionary() {
         <CardContent>
           <div className="row wrap gap">
             <div className="input-wrap">
-              <span className="input-icon"><img src="/search.png" alt="logo" width={20} /></span>
+              <span className="input-icon"><Search size={20} /></span>
               <input
                 dir="rtl"
                 placeholder="ابحث عن كلمة..."
@@ -825,16 +825,15 @@ export function Dictionary() {
                 <CardHeader className="pb-0">
                   <div className="row between">
                     <CardTitle className="text-lg">{item.arabic}</CardTitle>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className={`rounded btn-icon fav-toggle ${favs.includes(item.id) ? "is-fav" : ""}`}
-                      onClick={() => toggleFav(item.id, item.arabic)}
-                      ariaLabel="تبديل المفضلة"
-                      title={favs.includes(item.id) ? "إزالة من المفضلة" : "إضافة للمفضلة"}
-                    >
-                      {favs.includes(item.id) ? "★" : "☆"}
-                    </Button>
+                    <span onClick={() => toggleFav(item.id, item.word)} style={{ cursor: "pointer" }}>
+                      <Star
+                        size={18}
+                        fill={favs.includes(item.id) ? "#FFC300" : "none"}
+                        stroke="#FFC300"
+                      />
+                    </span>
+
+
                   </div>
                   <CardDescription>{item.translit} • {item.topic}</CardDescription>
                 </CardHeader>
@@ -1277,7 +1276,7 @@ export default function SignLanguageSite() {
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-brand">
-            <img src="/hand.png" alt="Logo" className="footer-logo" />
+            <Hand size={26} />
             <span className="footer-title">إشارة</span>
           </div>
 
@@ -1288,9 +1287,9 @@ export default function SignLanguageSite() {
           </nav>
 
           <div className="footer-social" style={{ display: "flex", gap: "20px" }}>
-            <a href="#"><img src="/facebook.png" alt="Facebook" /></a>
-            <a href="#"><img src="/twitter.png" alt="Twitter" /></a>
-            <a href="#"><img src="/youtube.png" alt="YouTube" /></a>
+            <a href="#"><Facebook size={23} style={{ color: "black" }} /></a>
+            <a href="#"><Twitter size={23} style={{ color: "black" }} /></a>
+            <a href="#"><Youtube size={23} style={{ color: "black" }} /></a>
           </div>
         </div>
 
