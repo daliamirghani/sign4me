@@ -860,9 +860,9 @@ export function Quiz() {
   const [level, setLevel] = useState(null);
 
   const urlMap = {
-    beginner: "http://localhost:5000/data/quiz/showSigns/1",
-    intermediate: "http://localhost:5000/data/quiz/showSigns/2",
-    advanced: "http://localhost:5000/data/quiz/showSigns/3",
+    beginner: "https://sign-language-practice-tool.onrender.com/data/quiz/showSigns/1",
+    intermediate: "https://sign-language-practice-tool.onrender.com/data/quiz/showSigns/2",
+    advanced: "https://sign-language-practice-tool.onrender.com/data/quiz/showSigns/3",
   };
 
   useEffect(() => {
